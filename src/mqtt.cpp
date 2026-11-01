@@ -65,7 +65,7 @@ void onMessage(char *topicC, byte *payload, unsigned int len) {
   } else if (t.startsWith("outlet/") && t.endsWith("/set")) {
     String which = t.substring(7, t.length() - 4);
     String message;
-    bool ok = Api::setOutlet(which, p, message);
+    bool ok = Api::setOutlet(which, p, message, "mqtt " + t);
     result("outlet", ok, message);
   } else if (t == "set") {
     // {"top":"on","bottom":"toggle"} or {"outlet1":"off"} or {"all":"off"}
@@ -77,7 +77,7 @@ void onMessage(char *topicC, byte *payload, unsigned int len) {
       String key = kv.key().c_str();
       if (key.startsWith("outlet")) key = key.substring(6);
       String value = kv.value().is<bool>() ? String(kv.value().as<bool>() ? "on" : "off") : kv.value().as<String>();
-      ok = Api::setOutlet(key, value, message) && ok;
+      ok = Api::setOutlet(key, value, message, "mqtt set") && ok;
     }
     result("set", ok, message);
   } else if (t == "press") {
@@ -87,6 +87,7 @@ void onMessage(char *topicC, byte *payload, unsigned int len) {
     int i = Outlets::parse(which);
     if (i < 0 || i >= Outlets::COUNT) return result("press", false, "button must be 1-2, top or bottom.");
     Outlets::pressButton(i);
+    logf("[cmd] press %s from mqtt", Outlets::key(i));
     result("press", true, String("Outlet ") + Outlets::key(i) + (Outlets::isOn(i) ? " on." : " off."));
   }
 }

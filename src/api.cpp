@@ -173,7 +173,8 @@ void handleController() {
 void handleOutlet() {
   if (!authorize()) return;
   String message;
-  bool ok = Api::setOutlet(g_server.arg("outlet"), g_server.hasArg("state") ? g_server.arg("state") : "toggle", message);
+  bool ok = Api::setOutlet(g_server.arg("outlet"), g_server.hasArg("state") ? g_server.arg("state") : "toggle", message,
+                           "http " + g_server.client().remoteIP().toString());
   sendResult(ok, message);
 }
 
@@ -182,6 +183,7 @@ void handlePress() {
   int i = Outlets::parse(g_server.arg("button"));
   if (i < 0 || i >= Outlets::COUNT) return sendResult(false, "button must be 1-2, top or bottom.");
   Outlets::pressButton(i);
+  logf("[cmd] press %s from http %s", Outlets::key(i), g_server.client().remoteIP().toString().c_str());
   sendResult(true, String("Outlet ") + Outlets::key(i) + (Outlets::isOn(i) ? " on." : " off."));
 }
 
@@ -549,7 +551,7 @@ String controllerJson(bool live) {
   return out;
 }
 
-bool setOutlet(const String &which, const String &stateArg, String &message) {
+bool setOutlet(const String &which, const String &stateArg, String &message, const String &source) {
   int i = Outlets::parse(which);
   if (i < 0) {
     message = "outlet must be 1, 2, top, bottom or all.";
@@ -577,6 +579,7 @@ bool setOutlet(const String &which, const String &stateArg, String &message) {
   }
   message = i == Outlets::COUNT ? String("All outlets ") + (mode == 2 ? "toggled." : mode ? "on." : "off.")
                                 : String("Outlet ") + Outlets::key(i) + (Outlets::isOn(i) ? " on." : " off.");
+  logf("[cmd] %s %s from %s", Outlets::key(i), state.isEmpty() ? "toggle" : state.c_str(), source.c_str());
   return true;
 }
 
