@@ -44,7 +44,7 @@ Template: `{"NAME":"Gosund WO1","GPIO":[320,0,576,0,2656,2720,0,0,2624,321,225,2
 | GPIO5 | 2720 | BL0937 CF | BL0937 CF: active-power pulse train |
 | GPIO9 | 0 | — | Free (ESP8285 only, because flash is internal) |
 | GPIO10 | 0 | — | Free (ESP8285 only) |
-| GPIO12 | 2624 | HLWBL SEL_i | BL0937 SEL, inverted: selects whether CF1 outputs current or voltage |
+| GPIO12 | 2624 | HLWBL SEL_i | BL0937 SEL: **high = voltage**, low = current (measured; Tasmota's "_i" is cancelled by its read order) |
 | GPIO13 | 321 | Led_i 2 | Status LED for outlet 2, active-low |
 | GPIO14 | 225 | Relay 2 | Outlet 2 relay (active-high) |
 | GPIO15 | 224 | Relay 1 | Outlet 1 relay (active-high). Boot strap pin, must be low at boot (fine for a relay driver) |

@@ -18,7 +18,7 @@
 void setup() {
   Serial.begin(115200);
   Storage::begin();  // formats LittleFS on the first boot after Tasmota
-  Outlets::begin();
+  Outlets::begin();  // ~80 ms after power-up
   logf("\n" LOGIX_MODEL_NAME " " FW_VERSION " (%s)", ESP.getResetReason().c_str());
   Energy::begin();
   Settings::begin();  // after Energy: the Tasmota import brings energy totals along

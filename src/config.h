@@ -13,7 +13,9 @@ constexpr uint8_t PIN_LED_TOP = 0;        // outlet 1 LED, active low (boot stra
 constexpr uint8_t PIN_LED_LINK = 2;       // WiFi LED, active low, not visible on the faceplate
 constexpr uint8_t PIN_BL_CF1 = 4;         // BL0937 CF1: voltage or current pulses, chosen by SEL
 constexpr uint8_t PIN_BL_CF = 5;          // BL0937 CF: active power pulses
-constexpr uint8_t PIN_BL_SEL = 12;        // BL0937 SEL: low = voltage on CF1, high = current
+// BL0937 SEL: high = voltage on CF1, low = current. Measured on the device: Tasmota calls this
+// pin "SEL_i", but its code reads each window after flipping SEL, which cancels the inversion.
+constexpr uint8_t PIN_BL_SEL = 12;
 constexpr uint8_t PIN_LED_BOTTOM = 13;    // outlet 2 LED, active low
 constexpr uint8_t PIN_RELAY_BOTTOM = 14;  // outlet 2 relay, active high
 constexpr uint8_t PIN_RELAY_TOP = 15;     // outlet 1 relay, active high (boot strap: low at boot)

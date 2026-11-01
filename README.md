@@ -30,7 +30,7 @@ See [API.md](API.md) for the HTTP and MQTT API and [DEVICE.md](DEVICE.md) for th
 | 2 | WiFi LED (active low, inside the box) |
 | 5 | BL0937 CF (power) |
 | 4 | BL0937 CF1 (voltage / current) |
-| 12 | BL0937 SEL (low = voltage) |
+| 12 | BL0937 SEL (high = voltage) |
 | A0 | Both buttons, resistor ladder: idle ≈ 1024, top ≈ 754, bottom ≈ 314 |
 
 The pin map is hard-coded in [src/config.h](src/config.h).

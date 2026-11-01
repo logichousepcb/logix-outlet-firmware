@@ -67,6 +67,7 @@ void onConnected() {
       MDNS.addService("logix", "tcp", 80);
       MDNS.addServiceTxt("logix", "tcp", "model", LOGIX_MODEL);
       MDNS.addServiceTxt("logix", "tcp", "id", Settings::deviceId().c_str());
+      MDNS.addServiceTxt("logix", "tcp", "name", Settings::name().c_str());
       MDNS.addServiceTxt("logix", "tcp", "fw", FW_VERSION);
       MDNS.addServiceTxt("logix", "tcp", "api", String(LOGIX_API_VERSION).c_str());
       MDNS.addServiceTxt("logix", "tcp", "manufacturer", LOGIX_MANUFACTURER);

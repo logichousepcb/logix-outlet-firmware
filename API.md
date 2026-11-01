@@ -24,6 +24,7 @@ The device advertises `_logix._tcp.local.` (and `_http._tcp`) on port 80, with t
 | `id` | `c4dd573121fb` | lowercase MAC without separators; stable unique ID |
 | `fw` | `1.0.0` | firmware version |
 | `api` | `1` | API contract version; increases only on breaking changes |
+| `name` | `Family Room Outlet` | device name |
 | `manufacturer` | `Logix` | |
 
 ## GET /api/info

@@ -94,7 +94,7 @@ void setSel(bool voltage) {
   g_cf1N = 0;
   g_cf1Skip = 2;
   interrupts();
-  digitalWrite(PIN_BL_SEL, voltage ? LOW : HIGH);
+  digitalWrite(PIN_BL_SEL, voltage ? HIGH : LOW);
   g_phaseStart = millis();
 }
 
@@ -118,7 +118,9 @@ void defaults() {
 void saveRtc() {
   g_e.magic = ENERGY_MAGIC;
   g_e.checksum = Storage::checksum(g_e);
-  ESP.rtcUserMemoryWrite(RTC_BLOCK, reinterpret_cast<uint32_t *>(&g_e), sizeof(g_e));
+  uint32_t words[sizeof(g_e) / 4];  // RTC memory is word-addressed; the packed struct may not be aligned
+  memcpy(words, &g_e, sizeof(g_e));
+  ESP.rtcUserMemoryWrite(RTC_BLOCK, words, sizeof(words));
   g_rtcSavedAt = millis();
 }
 
@@ -231,7 +233,9 @@ void begin() {
   StoredEnergy flash;
   bool haveFlash = Storage::load(ENERGY_PATH, flash, ENERGY_MAGIC);
   StoredEnergy rtc;
-  ESP.rtcUserMemoryRead(RTC_BLOCK, reinterpret_cast<uint32_t *>(&rtc), sizeof(rtc));
+  uint32_t words[sizeof(rtc) / 4];
+  ESP.rtcUserMemoryRead(RTC_BLOCK, words, sizeof(words));
+  memcpy(&rtc, words, sizeof(rtc));
   bool haveRtc = Storage::valid(rtc, ENERGY_MAGIC);
 
   // RTC memory survives a restart but not a power cut, and is newer than flash when present.

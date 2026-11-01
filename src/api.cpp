@@ -72,6 +72,15 @@ String htmlEscape(const String &s) {
   return out;
 }
 
+// Both strings in flash; strncmp_P only allows its second argument there.
+bool startsWithP(PGM_P s, PGM_P prefix) {
+  for (;; s++, prefix++) {
+    char c = pgm_read_byte(prefix);
+    if (!c) return true;
+    if (pgm_read_byte(s) != c) return false;
+  }
+}
+
 // Streams the page straight from flash, filling in %TITLE% and %VIEW% on the way, so it
 // never needs a heap copy of the whole page.
 void sendPage(bool settingsView) {
@@ -92,8 +101,8 @@ void sendPage(bool settingsView) {
       break;
     }
     size_t skip = 0;
-    if (strncmp_P(pct, TITLE, strlen_P(TITLE)) == 0) skip = strlen_P(TITLE);
-    else if (strncmp_P(pct, VIEW, strlen_P(VIEW)) == 0) skip = strlen_P(VIEW);
+    if (startsWithP(pct, TITLE)) skip = strlen_P(TITLE);
+    else if (startsWithP(pct, VIEW)) skip = strlen_P(VIEW);
     g_server.sendContent_P(p, pct - p + (skip ? 0 : 1));
     if (skip == strlen_P(TITLE)) g_server.sendContent(title);
     else if (skip) g_server.sendContent(settingsView ? "settings" : "main");
